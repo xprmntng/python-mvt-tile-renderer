@@ -35,7 +35,6 @@ class TilePainter:
     def paint(self, layers, styles):
         features = layers['water']
         water_style = styles.water
-        # for geometry in features:
         for polygon in features[0]:
             shoelace = calculate_winding_order(polygon.points)
             if shoelace < 0:
@@ -43,7 +42,7 @@ class TilePainter:
             else:
                 fill = self.land_color
             self.ctx.polygon(polygon.points, fill=fill)
-        
+
         for geometry in features[1:]:
             for polygon in geometry:
                 shoelace = calculate_winding_order(polygon.points)
@@ -121,11 +120,9 @@ def extract_polygon(geometry_commands):
                 dx = zigzag_decode(next(commands_and_parameters, None))
                 dy = zigzag_decode(next(commands_and_parameters, None))
                 d = (dx, dy)
-                # prev = c
                 p = add(c, d)
                 points.append(p)
                 c = p
-                # print(prev, '+', m, '=', c)
     return polygons
 
 
@@ -142,11 +139,11 @@ def calculate_winding_order(points: list[tuple[int, int]]) -> int:
     The polygon must be closed, meaning the first point and last point in the list are identical
     """
     shoelace_sum = 0
-    
+
     for i in range(len(points) - 1):
         x1, y1 = points[i]
         x2, y2 = points[i + 1]
-        shoelace_sum += (x2 - x1) * (y2 + y1) 
+        shoelace_sum += (x2 - x1) * (y2 + y1)
     return shoelace_sum
 
 
