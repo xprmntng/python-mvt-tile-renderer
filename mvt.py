@@ -1,10 +1,11 @@
-from box import Box
 import gzip
-from google.protobuf.json_format import MessageToDict
 from math import log2
 from pathlib import Path
 import sys
+
+from box import Box
 from PIL import Image, ImageDraw
+from google.protobuf.json_format import MessageToDict
 
 from gen.vector_tile_pb2 import Tile
 
