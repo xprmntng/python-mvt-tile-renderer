@@ -1,0 +1,13 @@
+/src
+/target
+/Cargo.*
+/.venv
+*.txt
+!/requirements.txt
+*.mvt
+*.png
+*_pb2.py
+/proto
+/node_modules
+/gen
+__pycache__
