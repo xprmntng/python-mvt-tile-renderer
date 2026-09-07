@@ -7,9 +7,10 @@ fi
 
 # Download MVT .proto spec
 if [[ ! -f proto/vector_tile.proto ]] ; then
-    curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/refs/heads/master/2.1/vector_tile.proto \
-        --create-dirs \
-        --output-dir proto/
+    mkdir -p proto/
+    pushd proto/
+    curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/refs/heads/master/2.1/vector_tile.proto
+    popd
 fi
 
 # Generate Python code based on the .proto downloaded. Output paths are defined in buf.gen.yaml
