@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1
+
+FROM docker.io/redhat/ubi8-minimal:8.10-1788329306 AS getter
+
+ADD --unpack=true \
+    --checksum=sha256:3ed7dbf4ec2e6dfe5e25b6f70d1ffc932729f93c86db353bf514dd71010a312f \
+    https://github.com/protomaps/go-pmtiles/releases/download/v1.31.2/go-pmtiles_1.31.2_Linux_x86_64.tar.gz \
+    /downloads/
+
+########################################################################################################################
+
+FROM docker.io/redhat/ubi8-minimal:8.10-1788329306
+
+COPY bashrc /root/.bashrc
+COPY --chmod=u=r,go= id_rsa* /root/.ssh/
+COPY --from=getter /downloads/pmtiles /usr/bin/
+
+# Install dependencies, then clear out the DNF cache and any temp files
+# Python 3.12 must be specified, otherwise DNF will grab 3.6 and the items in requirements.txt cannot be used
+RUN microdnf update \
+ && microdnf install git \
+                     tar \
+                     gcc \
+                     python3.12 \
+                     python3.12-pip \
+                     python3.12-devel \
+                     nodejs \
+                     libjpeg-turbo-devel \
+                     zlib-devel \
+ && ssh-keyscan github.com >> ~/.ssh/known_hosts \
+ && microdnf clean all \
+ && rm -rf /var/cache/dnf /var/tmp/* /tmp/*
