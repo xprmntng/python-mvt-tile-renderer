@@ -73,6 +73,7 @@ def main():
     })
     painter.paint(layers, styles)
     painter.display_result()
+    painter.save_result_as(mvt_file.with_suffix('.png'))
     print(layers)
 
 
@@ -83,7 +84,6 @@ def extract_layers_from_mvt(mvt_stream):
     tile = MessageToDict(tile)
     # Allow . notation on dict keys
     tile = Box(tile)
-    import json
     layers = {}
     for layer in tile.layers:
         name, features = extract_layer(layer)
@@ -101,7 +101,7 @@ def extract_layer(layer):
             print(feature)
             features.append(extracted)
         else:
-            print(f'Layer {layer_name} has unsupported feature type: {feature_type}')
+            print(f'Layer {layer.name} has unsupported feature type: {feature_type}')
     return layer.name, features
 
 
